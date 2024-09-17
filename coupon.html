@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coupon Verification</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-   <style>
+    <style>
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f4f4f9;
@@ -78,12 +78,12 @@
             <option value="non-binary">Non-Binary</option>
         </select><br>
         <input type="text" id="phone" placeholder="Enter phone number"><br>
-         <input type="text" id="date" placeholder="Enter phone number"><br>
+        <input type="text" id="date" placeholder="Enter Today's Date"><br>
         <button onclick="submitDetails()">Submit</button>
     </div>
 
     <script>
-        // Move the verifyEmployee function outside of the script module
+        // Verify employee password
         function verifyEmployee() {
             const password = document.getElementById("employee-password").value;
             if (password === 'gigi1234') {
@@ -106,8 +106,8 @@
             }
 
             try {
-                const docRef = doc(db, "coupons", couponId);
-                await updateDoc(docRef, {
+                const docRef = window.doc(window.db, "coupons", window.couponId); // Use global Firestore functions
+                await window.updateDoc(docRef, {
                     status: 'used',
                     verified: true,
                     user_details: {
@@ -149,9 +149,16 @@
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
+        // Make Firestore functions accessible globally
+        window.db = db;
+        window.doc = doc;
+        window.getDoc = getDoc;
+        window.updateDoc = updateDoc;
+
         // Get coupon ID from URL
         const urlParams = new URLSearchParams(window.location.search);
-        const couponId = urlParams.get('id');
+        const couponId = "COUPON001"
+        window.couponId = couponId;
 
         // Check coupon status
         async function checkCouponStatus() {
